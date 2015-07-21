@@ -50,15 +50,15 @@ class RegistrationTest < Test::Unit::TestCase
     assert(@browser.find_element(:id, 'flash_notice').displayed?)
   end
 
-  # def test_05_add_user_to_project
-  #   go_to_home_page
-  #   user_to_add = register_account
-  #   logout_from_account
-  #   register_account
-  #   create_new_project
-  #   add_user_to_project(user_to_add)
-  #
-  # end
+  def test_05_add_user_to_project
+    go_to_home_page
+    user_to_add = register_account
+    logout_from_account
+    register_account
+    create_new_project
+    add_user_to_project(user_to_add)
+
+  end
 
   # def test_06_edit_user_roles
   #
@@ -143,18 +143,25 @@ class RegistrationTest < Test::Unit::TestCase
   def add_user_to_project(user_to_add)
     @browser.find_element(:id, 'tab-members').click
     @browser.find_element(:css, '#tab-content-members .icon-add').click
+
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
+    wait.until { @browser.find_element(:id => 'principal_search').displayed? }
+
     @browser.find_element(:id, 'principal_search').send_key user_to_add
 
     wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
-    wait.until { @driver.find_element(:xpath => ".//*[@id='principals']/label[1]/input").displayed? }
+    wait.until { @browser.find_elements(:name => "membership[user_ids][]").count == 1 }
 
 
-    @browser.find_element(:xpath, ".//*[@id='principals']/label[1]/input").click
+    @browser.find_element(:name, "membership[user_ids][]").click
     #what if there are multiple search results?
 
     @browser.find_element(:name, 'membership[role_ids][]').click
     click_commit_button
   end
+
+
+  select_role(role_name)
 
   def edit_user_roles
 
@@ -182,7 +189,7 @@ class RegistrationTest < Test::Unit::TestCase
 
 
   def teardown
-    @browser.quit
+    #@browser.quit
   end
 
 end
