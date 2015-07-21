@@ -7,13 +7,6 @@ class RegistrationTest < Test::Unit::TestCase
     @browser = Selenium::WebDriver.for :firefox
   end
 
-#################_VERIABLES_#################
-
-
-  @@password = 'ererere'
-  @@firstname = 'First Name'
-  @@lastname = 'Last Name'
-  #@@mail = @@login + '@email.com'
 
 ###################_TESTS_###################
 
@@ -21,7 +14,7 @@ class RegistrationTest < Test::Unit::TestCase
     go_to_home_page
 
     register_account
-    assert(@browser.find_element(:id, 'flash_notice').displayed?)
+    assert_true(@browser.find_element(:id, 'flash_notice').displayed?)
   end
 
   def test_02_login_logout
@@ -31,23 +24,23 @@ class RegistrationTest < Test::Unit::TestCase
 
     logout_from_account
     login_to_account(login)
-    assert(@browser.find_element(:id, 'loggedas').displayed?)
+    assert_true(@browser.find_element(:id, 'loggedas').displayed?)
     logout_from_account
-    assert(@browser.find_element(:class, 'login'))
+    assert_true(@browser.find_element(:class, 'login').displayed?) # Making sure I'm not logged in (logout is successful)
   end
 
   def test_03_change_password
     go_to_home_page
     login = register_account
     change_account_password
-    assert(@browser.find_element(:id, 'flash_notice').displayed?)
+    assert_true(@browser.find_element(:id, 'flash_notice').displayed?)
   end
 
   def test_04_create_new_project
     go_to_home_page
     register_account
     create_new_project
-    assert(@browser.find_element(:id, 'flash_notice').displayed?)
+    assert_true(@browser.find_element(:id, 'flash_notice').displayed?)
   end
 
   def test_05_add_user_to_project
@@ -57,7 +50,6 @@ class RegistrationTest < Test::Unit::TestCase
     register_account
     create_new_project
     add_user_to_project(user_to_add)
-
   end
 
   # def test_06_edit_user_roles
@@ -85,10 +77,10 @@ class RegistrationTest < Test::Unit::TestCase
 
     @browser.find_element(:class, 'register').click
     @browser.find_element(:id, 'user_login').send_keys login
-    @browser.find_element(:id, 'user_password').send_keys @@password
-    @browser.find_element(:id, 'user_password_confirmation').send_keys @@password
-    @browser.find_element(:id, 'user_firstname').send_keys @@firstname
-    @browser.find_element(:id, 'user_lastname').send_keys @@lastname
+    @browser.find_element(:id, 'user_password').send_keys 'ererere'
+    @browser.find_element(:id, 'user_password_confirmation').send_keys 'ererere'
+    @browser.find_element(:id, 'user_firstname').send_keys 'user'
+    @browser.find_element(:id, 'user_lastname').send_keys login
     @browser.find_element(:id, 'user_mail').send_keys login + '@email.com'
 
     click_commit_button
@@ -98,32 +90,23 @@ class RegistrationTest < Test::Unit::TestCase
   def login_to_account (login)
     @browser.find_element(:class, 'login').click
     @browser.find_element(:id, 'username').send_keys login
-    @browser.find_element(:id, 'password').send_keys @@password
+    @browser.find_element(:id, 'password').send_keys 'ererere'
     @browser.find_element(:name, 'login').click
     login
   end
 
   def logout_from_account
-    assert(@browser.find_element(:id, 'loggedas').displayed?) #Should we do this here?
-    # Duplicates assert in the test, but seems to be needed here in case if this method is reused
-
     @browser.find_element(:class, 'logout').click
-    #assert(@browser.find_element(:class, 'login')) - probably should be moved out to the test, is that right?
   end
 
   def change_account_password
-    assert(@browser.find_element(:id, 'loggedas').displayed?)
-
-    new_password = @@password + '1'
-
     @browser.find_element(:class, 'my-account').click
-    @browser.find_element(:css, '.contextual .icon-passwd').click
-    @browser.find_element(:id, 'password').send_keys @@password
+    @browser.find_element(:css, '.contextual .icon-passwd').click # does not locate if changed to :class, 'icon-passwd'
+    @browser.find_element(:id, 'password').send_keys 'ererere'
 
-    @browser.find_element(:id, 'new_password').send_keys new_password
-    @browser.find_element(:id, 'new_password_confirmation').send_keys new_password
+    @browser.find_element(:id, 'new_password').send_keys 'ererere1'
+    @browser.find_element(:id, 'new_password_confirmation').send_keys 'ererere1'
     click_commit_button
-    new_password
   end
 
   def create_new_project
@@ -161,7 +144,7 @@ class RegistrationTest < Test::Unit::TestCase
   end
 
 
-  select_role(role_name)
+  #select_role(role_name)
 
   def edit_user_roles
 
