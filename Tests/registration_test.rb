@@ -46,14 +46,14 @@ class RegistrationTest < Test::Unit::TestCase
     assert_true(@browser.find_element(:id, 'flash_notice').displayed?)
   end
 
-  # def test_05_add_user_to_project
-  #   go_to_home_page
-  #   user_to_add = register_account
-  #   logout_from_account
-  #   register_account
-  #   create_new_project
-  #   add_user_to_project(user_to_add)
-  # end
+  def test_05_add_user_to_project
+    go_to_home_page
+    user_to_add = register_account
+    logout_from_account
+    register_account
+    create_new_project
+    add_user_to_project(user_to_add)
+  end
 
   # def test_06_edit_user_roles
   #
@@ -77,7 +77,7 @@ class RegistrationTest < Test::Unit::TestCase
 
 
   def teardown
-    @browser.quit
+    #@browser.quit
   end
 
 end

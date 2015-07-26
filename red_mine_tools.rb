@@ -65,19 +65,18 @@ module RedMineTools
     wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
     wait.until { @browser.find_elements(:name => "membership[user_ids][]").count == 1 }
 
-
     @browser.find_element(:name, "membership[user_ids][]").click
-    #what if there are multiple search results?
 
-    @browser.find_element(:name, 'membership[role_ids][]').click
-    click_commit_button
+    edit_user_roles("Manager")
+
+    click_add_member_button
   end
 
-
-  #select_role(role_name)
-
-  def edit_user_roles
-
+  def edit_user_roles(user_role) # to be changed to array
+    elements_array = @browser.find_elements(:css, '.roles-selection>label')
+    elements_array.map!(&:text) # or elements_array.map!{|i| i.text}
+    index = elements_array.index(user_role)
+    @browser.find_elements(:css, '.roles-selection>label')[index].click
   end
 
   def create_project_version
@@ -98,6 +97,10 @@ module RedMineTools
 
   def click_commit_button
     @browser.find_element(:name, 'commit').click
+  end
+
+  def click_add_member_button
+    @browser.find_element(:id, "member-add-submit").click
   end
 
 
