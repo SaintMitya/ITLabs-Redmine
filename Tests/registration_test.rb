@@ -53,11 +53,15 @@ class RegistrationTest < Test::Unit::TestCase
     register_account
     create_new_project
     add_user_to_project(user_to_add)
+    verify_user_added_to_project(user_to_add)
   end
 
-  # def test_06_edit_user_roles
-  #
-  # end
+  def test_06_edit_user_roles
+    go_to_home_page
+    register_accout
+    create_new_project
+
+  end
   #
   # def test_07_create_project_version
   #

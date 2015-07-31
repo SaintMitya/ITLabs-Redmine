@@ -67,16 +67,38 @@ module RedMineTools
 
     @browser.find_element(:name, "membership[user_ids][]").click
 
-    edit_user_roles("Manager")
+    set_user_roles("Manager")
 
     click_add_member_button
   end
 
-  def edit_user_roles(user_role) # to be changed to array
+  def set_user_roles(user_role) # to be changed to array
     elements_array = @browser.find_elements(:css, '.roles-selection>label')
     elements_array.map!(&:text) # or elements_array.map!{|i| i.text}
     index = elements_array.index(user_role)
     @browser.find_elements(:css, '.roles-selection>label')[index].click
+  end
+
+  def edit_user_roles(roles_array)
+
+  end
+
+  def verify_user_added_to_project(user_to_add)
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
+    wait.until { @browser.find_elements(:css, '.list.members .user.active').count > 1 }
+    users_array = get_active_project_members
+    # puts (users_array.include? user_to_add)
+    # puts user_to_add + " - added user"
+    # users_array.each{|x| puts x}
+    assert_true(users_array.include? user_to_add)
+  end
+
+  def get_active_project_members
+    users_array = @browser.find_elements(:css, '.list.members .user.active')
+    users_array.map!(&:text)
+    #users_array.each{|el| puts el}
+    users_array.map!{|el| el.delete "user "}
+    #users_array.each{|x| puts x}
   end
 
   def create_project_version
