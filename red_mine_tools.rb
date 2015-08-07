@@ -67,20 +67,36 @@ module RedMineTools
 
     @browser.find_element(:name, "membership[user_ids][]").click
 
-    set_user_roles("Manager")
+    initially_set_user_roles("Manager")
 
     click_add_member_button
   end
 
-  def set_user_roles(user_role) # to be changed to array
+  def initially_set_user_roles(user_role) # to be changed to array
     elements_array = @browser.find_elements(:css, '.roles-selection>label')
     elements_array.map!(&:text) # or elements_array.map!{|i| i.text}
     index = elements_array.index(user_role)
     @browser.find_elements(:css, '.roles-selection>label')[index].click
   end
 
-  def edit_user_roles(roles_array)
+  def edit_user_roles(user, role)
+    case role
+      when "Manager"
+        role_value = '3'
+      when "Developer"
+        role_value = '4'
+      when "Reporter"
+        role_value = '5'
+      else
+        puts role + " is an invalid user role"
+    end
 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
+    wait.until { @browser.find_elements(:css, '.list.members .user.active').count > 1 }
+
+    @browser.find_element(:xpath, ".//*[contains(text(),'#{user}')]/../..//*[@class='icon icon-edit']").click
+    @browser.find_element(:xpath, ".//*[contains(text(),'#{user}')]/../..//input[@name='membership[role_ids][]'][@type='checkbox'][@value='#{role_value}']").click
+    @browser.find_element(:xpath, ".//*[contains(text(),'#{user}')]/../..//input[@type='submit'][@value='Save']").click
   end
 
   def verify_user_added_to_project(user_to_add)

@@ -58,8 +58,12 @@ class RegistrationTest < Test::Unit::TestCase
 
   def test_06_edit_user_roles
     go_to_home_page
-    register_accout
+    test_user_one = register_account
+    logout_from_account
+    test_user_two = register_account
     create_new_project
+    add_user_to_project(test_user_one)
+    edit_user_roles(test_user_one, "Developer")
 
   end
   #
