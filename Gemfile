@@ -1,3 +1,5 @@
 source 'https://rubygems.org'
 gem 'selenium-webdriver'
-gem 'test-unit'
+gem 'rake'
+gem 'rspec'
+gem 'cucumber'

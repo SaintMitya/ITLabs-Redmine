@@ -1,3 +1,5 @@
+# File to be deleted
+
 module RedMineTools
 
   def register_account

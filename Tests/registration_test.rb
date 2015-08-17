@@ -1,3 +1,6 @@
+# File to be deleted
+
+
 require 'selenium-webdriver'
 require 'test/unit'
 require_relative '../red_mine_tools'
@@ -64,7 +67,6 @@ class RegistrationTest < Test::Unit::TestCase
     create_new_project
     add_user_to_project(test_user_one)
     edit_user_roles(test_user_one, "Developer")
-
   end
   #
   # def test_07_create_project_version
